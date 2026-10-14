@@ -16,23 +16,48 @@ Suri, including additional deployment options.
 
 1. Hit the "Use this template" button above and then "Create a new repository".
    Fill in the required details to create a new repository based on this one.
+   On a free GitHub plan, the repository must be public for GitHub Pages to
+   work.
 2. Go to the "Settings" of your new repository and head to the "Pages" section.
    Under "Build and deployment", change the "Source" to "GitHub Actions".
-3. Go to the "Actions" of your new repository. There should be a workflow run
-   that likely failed because the previous step wasn't yet completed. Go ahead
-   and view the workflow run and hit the "Re-run jobs" button.
+3. Go to the "Actions" of your new repository and select the "Deploy to GitHub
+   Pages" workflow. Hit the "Run workflow" button to build and deploy your site
+   for the first time.
 
 ### Auto-Deploy
 
 Any commits to the `main` branch of your new repository will trigger a new build
-and deploy. You can change this by editing
+and deploy. Pull requests are built without deploying, so a mistake in
+`links.json` is caught before it's merged. You can change this by editing
 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which is the
 GitHub Actions workflow for building the site and deploying to GitHub Pages.
 
 ### Custom Domain
 
+Without a custom domain, GitHub Pages serves your site from
+`https://<username>.github.io/<repository>/` (unless the repository is named
+`<username>.github.io`), so every short link includes the repository name, like
+`/<repository>/gh`. Suri's default `favicon.ico` and `robots.txt` also go
+unused there, since browsers and crawlers only look for them at the root of a
+domain.
+
 To use a custom domain, follow GitHub's guide:
 [Managing a custom domain for your GitHub Pages site](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site).
+
+### Updating Suri
+
+[Dependabot](https://docs.github.com/en/code-security/dependabot) opens a pull
+request in your repository about a week after a new version of Suri is released.
+You can also update it yourself:
+
+```bash
+npm install @surishortlink/suri@latest
+```
+
+Then commit the updated `package.json` and `package-lock.json`. Before updating
+to a new major version, check
+[the release notes](https://github.com/surishortlink/suri/releases) for breaking
+changes.
 
 ## How It Works
 
@@ -52,8 +77,9 @@ include this file seeded with a few examples:
 
 It couldn't be simpler: the key is the "short link" path that gets redirected,
 and the value is the target URL. Keys can be as short or as long as you want,
-using whatever mixture of characters you want. `/` is a special entry for
-redirecting the root path.
+and can include `/` for nested paths, like `gh/suri`. Avoid `?` and `#`, which
+browsers treat as the start of a query string or fragment. `/` is a special
+entry for redirecting the root path.
 
 ### Build Static Site
 
