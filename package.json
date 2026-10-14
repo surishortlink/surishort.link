@@ -1,6 +1,6 @@
 {
   "name": "@surishortlink/deploy-github",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "description": "A template repository tailored for deploying Suri to GitHub Pages",
@@ -15,9 +15,9 @@
     "build": "suri"
   },
   "devDependencies": {
-    "@surishortlink/suri": "^1"
+    "@surishortlink/suri": "^2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   }
 }
